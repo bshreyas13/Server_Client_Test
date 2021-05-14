@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x12StylizeImage.proto\"<\n\x08\x42\x36\x34Image\x12\x18\n\x10\x62\x36\x34image_content\x18\x01 \x01(\t\x12\x16\n\x0e\x62\x36\x34image_style\x18\x02 \x01(\t\" \n\x0c\x42\x36\x34Image_out\x12\x10\n\x08\x62\x36\x34image\x18\x01 \x01(\t2<\n\x0cStylizeImage\x12,\n\x0eStylized_Image\x12\t.B64Image\x1a\r.B64Image_out\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x12StylizeImage.proto\"<\n\x08\x42\x36\x34Image\x12\x18\n\x10\x62\x36\x34image_content\x18\x01 \x01(\t\x12\x16\n\x0e\x62\x36\x34image_style\x18\x02 \x01(\t\"\x1b\n\x07out_img\x12\x10\n\x08\x62\x36\x34image\x18\x03 \x01(\t27\n\x0cStylizeImage\x12\'\n\x0eStylized_Image\x12\t.B64Image\x1a\x08.out_img\"\x00\x62\x06proto3'
 )
 
 
@@ -64,17 +64,17 @@ _B64IMAGE = _descriptor.Descriptor(
 )
 
 
-_B64IMAGE_OUT = _descriptor.Descriptor(
-  name='B64Image_out',
-  full_name='B64Image_out',
+_OUT_IMG = _descriptor.Descriptor(
+  name='out_img',
+  full_name='out_img',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='b64image', full_name='B64Image_out.b64image', index=0,
-      number=1, type=9, cpp_type=9, label=1,
+      name='b64image', full_name='out_img.b64image', index=0,
+      number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -92,11 +92,11 @@ _B64IMAGE_OUT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=84,
-  serialized_end=116,
+  serialized_end=111,
 )
 
 DESCRIPTOR.message_types_by_name['B64Image'] = _B64IMAGE
-DESCRIPTOR.message_types_by_name['B64Image_out'] = _B64IMAGE_OUT
+DESCRIPTOR.message_types_by_name['out_img'] = _OUT_IMG
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 B64Image = _reflection.GeneratedProtocolMessageType('B64Image', (_message.Message,), {
@@ -106,12 +106,12 @@ B64Image = _reflection.GeneratedProtocolMessageType('B64Image', (_message.Messag
   })
 _sym_db.RegisterMessage(B64Image)
 
-B64Image_out = _reflection.GeneratedProtocolMessageType('B64Image_out', (_message.Message,), {
-  'DESCRIPTOR' : _B64IMAGE_OUT,
+out_img = _reflection.GeneratedProtocolMessageType('out_img', (_message.Message,), {
+  'DESCRIPTOR' : _OUT_IMG,
   '__module__' : 'StylizeImage_pb2'
-  # @@protoc_insertion_point(class_scope:B64Image_out)
+  # @@protoc_insertion_point(class_scope:out_img)
   })
-_sym_db.RegisterMessage(B64Image_out)
+_sym_db.RegisterMessage(out_img)
 
 
 
@@ -122,8 +122,8 @@ _STYLIZEIMAGE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=118,
-  serialized_end=178,
+  serialized_start=113,
+  serialized_end=168,
   methods=[
   _descriptor.MethodDescriptor(
     name='Stylized_Image',
@@ -131,7 +131,7 @@ _STYLIZEIMAGE = _descriptor.ServiceDescriptor(
     index=0,
     containing_service=None,
     input_type=_B64IMAGE,
-    output_type=_B64IMAGE_OUT,
+    output_type=_OUT_IMG,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

@@ -18,7 +18,7 @@ class StylizeImageStub(object):
         self.Stylized_Image = channel.unary_unary(
                 '/StylizeImage/Stylized_Image',
                 request_serializer=StylizeImage__pb2.B64Image.SerializeToString,
-                response_deserializer=StylizeImage__pb2.B64Image_out.FromString,
+                response_deserializer=StylizeImage__pb2.out_img.FromString,
                 )
 
 
@@ -38,7 +38,7 @@ def add_StylizeImageServicer_to_server(servicer, server):
             'Stylized_Image': grpc.unary_unary_rpc_method_handler(
                     servicer.Stylized_Image,
                     request_deserializer=StylizeImage__pb2.B64Image.FromString,
-                    response_serializer=StylizeImage__pb2.B64Image_out.SerializeToString,
+                    response_serializer=StylizeImage__pb2.out_img.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -64,6 +64,6 @@ class StylizeImage(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/StylizeImage/Stylized_Image',
             StylizeImage__pb2.B64Image.SerializeToString,
-            StylizeImage__pb2.B64Image_out.FromString,
+            StylizeImage__pb2.out_img.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

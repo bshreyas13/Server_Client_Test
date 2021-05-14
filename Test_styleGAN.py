@@ -8,13 +8,14 @@ Created on Thu May 13 12:36:45 2021
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import base64
+import numpy as np
+import cv2
+from PIL import Image
 mpl.rcParams['figure.figsize'] = (12,12)
 mpl.rcParams['axes.grid'] = False
 
-## Paths to content and style images and models
-
-content_path = tf.keras.utils.get_file('belfry.jpg','https://storage.googleapis.com/khanhlvg-public.appspot.com/arbitrary-style-transfer/belfry-2611573_1280.jpg')
-style_path = tf.keras.utils.get_file('style23.jpg','https://storage.googleapis.com/khanhlvg-public.appspot.com/arbitrary-style-transfer/style23.jpg')
+## Paths to models
 
 style_predict_path = tf.keras.utils.get_file('style_predict.tflite', 'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/prediction/1?lite-format=tflite')
 style_transform_path = tf.keras.utils.get_file('style_transform.tflite', 'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/transfer/1?lite-format=tflite')
@@ -24,6 +25,13 @@ style_transform_path = tf.keras.utils.get_file('style_transform.tflite', 'https:
 def load_img(path_to_img):
   img = tf.io.read_file(path_to_img)
   img = tf.io.decode_image(img, channels=3)
+  img = tf.image.convert_image_dtype(img, tf.float32)
+  img = img[tf.newaxis, :]
+
+  return img
+
+# Function to load an image from a file, and add a batch dimension.
+def load_img_(img):
   img = tf.image.convert_image_dtype(img, tf.float32)
   img = img[tf.newaxis, :]
 
@@ -89,10 +97,35 @@ def run_style_transform(style_bottleneck, preprocessed_content_image):
       )()
 
   return stylized_image
-# Load the input images.
-content_image = load_img(content_path)
-style_image = load_img(style_path)
 
+def encode_toString(img):
+    retval, buffer = cv2.imencode('.jpg',img)
+    data = base64.b64encode(buffer)
+    return data
+
+def decode_toTensor(data):
+    
+    data_ = base64.b64decode(data)
+    img = np.frombuffer(data_, dtype=np.uint8)
+    img = cv2.imdecode(img, cv2.IMREAD_COLOR)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = load_img_(img)
+    
+    return img
+
+# # Load the input images.
+# content_image = load_img('content.jpg')
+# style_image = load_img(style_path)
+content_image = cv2.imread('content.jpg')
+style_image = cv2.imread('style.jpg')
+data = encode_toString(content_image)
+data_s = encode_toString(style_image)
+
+content_image = decode_toTensor(data)
+style_image =decode_toTensor(data_s)
+
+# content_image = content_img.reshape(1,content_image.shape[0],content_image.shape[1],content_image.shape[2])
+# style_image = style_image.reshape(1,style_image.shape[0],style_image.shape[1],style_image.shape[2])
 # Preprocess the input images.
 preprocessed_content_image = preprocess_image(content_image, 384)
 preprocessed_style_image = preprocess_image(style_image, 256)
@@ -100,10 +133,10 @@ preprocessed_style_image = preprocess_image(style_image, 256)
 print('Style Image Shape:', preprocessed_style_image.shape)
 print('Content Image Shape:', preprocessed_content_image.shape)
 
-plt.subplot(1, 2, 1)
+plt.subplot(1, 3, 1)
 imshow(preprocessed_content_image, 'Content Image')
 
-plt.subplot(1, 2, 2)
+plt.subplot(1, 3, 2)
 imshow(preprocessed_style_image, 'Style Image')
 
 # Calculate style bottleneck for the preprocessed style image.
@@ -114,4 +147,5 @@ print('Style Bottleneck Shape:', style_bottleneck.shape)
 stylized_image = run_style_transform(style_bottleneck, preprocessed_content_image)
 
 # Visualize the output.
+plt.subplot(1, 3, 3)
 imshow(stylized_image, 'Stylized Image')

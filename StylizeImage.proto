@@ -4,16 +4,16 @@ syntax = "proto3";
 message B64Image {
     string b64image_content = 1;
     string b64image_style = 2;
-    
+	    
+}
+// output img
+
+message out_img {
+    string b64image = 3;
 }
 
-// output Image
-
-message B64Image_out {
-    string b64image = 1;
-}
 
 // service
 service StylizeImage{
-    rpc Stylized_Image(B64Image) returns (B64Image_out) {}
+    rpc Stylized_Image(B64Image) returns (out_img) {}
 }
