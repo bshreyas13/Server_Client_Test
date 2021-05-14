@@ -12,6 +12,7 @@ import base64
 import numpy as np
 import cv2
 from PIL import Image
+import os
 mpl.rcParams['figure.figsize'] = (12,12)
 mpl.rcParams['axes.grid'] = False
 
@@ -145,7 +146,11 @@ print('Style Bottleneck Shape:', style_bottleneck.shape)
 
 # Stylize the content image using the style bottleneck.
 stylized_image = run_style_transform(style_bottleneck, preprocessed_content_image)
-
+image = tf.squeeze(stylized_image, axis=0)
+tf.keras.preprocessing.image.save_img("temp.jpg",image)
+stylized = cv2.imread('temp.jpg')
+# os.remove("temp.jpg")
+encoded = encode_toString(stylized)
 # Visualize the output.
 plt.subplot(1, 3, 3)
 imshow(stylized_image, 'Stylized Image')

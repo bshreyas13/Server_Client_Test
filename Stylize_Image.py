@@ -7,13 +7,10 @@ Created on Thu May 13 12:36:45 2021
 
 import tensorflow as tf
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import numpy as np 
 import base64
-import zlib
+import os
 import cv2
-mpl.rcParams['figure.figsize'] = (12,12)
-mpl.rcParams['axes.grid'] = False
 
 ## Paths to content and style images and models
 
@@ -27,6 +24,10 @@ def load_img_(img):
 
   return img
 
+def encode_toString(img):
+    retval, buffer = cv2.imencode('.jpg',img)
+    data = base64.b64encode(buffer)
+    return data
 
 def decode_toTensor(data):
     
@@ -100,10 +101,13 @@ def run_style_transform(style_bottleneck, preprocessed_content_image):
 
   return stylized_image
 
-def predict(content_image,style_image):
+def predict(content_image):
     
     content_img = decode_toTensor(content_image)
+    style_image = cv2.imread('style.jpg')
+    style_image = encode_toString(style_image)
     style_img =decode_toTensor(style_image)   
+    
     # Preprocess the input images.
     preprocessed_content_image = preprocess_image(content_img, 384)
     preprocessed_style_image = preprocess_image(style_img, 256)
@@ -122,11 +126,13 @@ def predict(content_image,style_image):
     print('Style Bottleneck Shape:', style_bottleneck.shape)
 
     # Stylize the content image using the style bottleneck.
+    print("Stylizing Image")
     stylized_image = run_style_transform(style_bottleneck, preprocessed_content_image)
-    data = stylized_image 
-    data = base64.b64encode(data)
-    
-    # Visualize the output.
-    imshow(stylized_image, 'Stylized Image')
-    
-    return data
+    print("Stylizing done")
+    image = tf.squeeze(stylized_image, axis=0)
+    tf.keras.preprocessing.image.save_img("temp.jpg",image)
+    stylized = cv2.imread('temp.jpg')
+    os.remove("temp.jpg")
+    encoded = encode_toString(stylized)
+    # print("Encoded Image")
+    return encoded

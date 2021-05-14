@@ -22,7 +22,7 @@ class StylizeImageServicer(StylizeImage_pb2_grpc.StylizeImageServicer):
     def Stylized_Image(self, request, context):
         response = StylizeImage_pb2.out_img()
         response.b64image = Stylize_Image.predict(request.b64image_content,request.b64image_style)
-        return response.b64_image
+        return response
 
 
 # create a gRPC server
@@ -39,7 +39,6 @@ StylizeImage_pb2_grpc.add_StylizeImageServicer_to_server(
         StylizeImageServicer(), server)
 
 # listen on port 5005
-MAX_MESSAGE_LENGTH = 60000000
 print('Starting server. Listening on port 5005.')
 server.add_insecure_port('[::]:5005')
 server.start()
