@@ -67,12 +67,10 @@ class ClientProtocol:
         data_ = base64.b64decode(data)
         img = np.frombuffer(data_, dtype=np.uint8)
         img = cv2.imdecode(img, cv2.IMREAD_COLOR)
-        # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)    
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)    
         return img
 
     def imshow(self,image, title=None):
-        if len(image.shape) > 3:
-            image = tf.squeeze(image, axis=0)
 
         plt.imshow(image)
         if title:
@@ -86,7 +84,7 @@ class ClientProtocol:
         # could handle a bad ack here, but we'll assume it's fine.            
 if __name__ == '__main__':
     
-    
+    ## Encode and Send Content Image
     cp = ClientProtocol()
     content_image = cv2.imread('content.jpg')
     image_data = cp.encode_toString(content_image)
@@ -95,13 +93,21 @@ if __name__ == '__main__':
     cp.send_image(image_data)
     cp.close()
     
+    ## Receive Stylized Image
     cp = ClientProtocol()
     cp.listen('127.0.0.1', 12344)
-    print("Waiting to receive")
-    ## Receive Stylized Image    
+    print("Waiting to receive")   
     out_img = cp.receive_images()
+    
+    ## Decode the output and save it
     out_img =cp.decode_toImage(out_img)
-    cv2.imwrite('Stylized_Img.jpg', out_img)
+    plt.subplot(1, 2, 1)
+    content_image = cv2.cvtColor(content_image, cv2.COLOR_BGR2RGB)
+    cp.imshow(content_image, 'Content Image')
+
+    plt.subplot(1,2, 2)
+    cp.imshow(out_img, 'Style Image')
+    plt.imsave("Stylized_Img",out_img)
     print("Received processed Image ")
     cp.close()
    

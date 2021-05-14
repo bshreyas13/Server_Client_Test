@@ -65,7 +65,8 @@ class ServerProtocol:
         self.socket.close()
         self.socket = None
 
-        # could handle a bad ack here, but we'll assume it's fine.
+        ### We can add acknowledgements for send and recieve on client and server side
+        ##for now we assume it works fine
 
 if __name__ == '__main__':
     
