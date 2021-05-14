@@ -11,8 +11,12 @@ import numpy as np
 import base64
 import os
 import cv2
+########################################################################
+## Script to download and apply style from one image to content image ##
+## using a pretrained styleGAN                                        ##
+######################################################################## 
 
-## Paths to content and style images and models
+## Paths to content and style images and models 
 
 style_predict_path = tf.keras.utils.get_file('style_predict.tflite', 'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/prediction/1?lite-format=tflite')
 style_transform_path = tf.keras.utils.get_file('style_transform.tflite', 'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/transfer/1?lite-format=tflite')

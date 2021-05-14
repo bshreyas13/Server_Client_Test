@@ -5,6 +5,11 @@ import cv2
 import Stylize_Image
 import base64
 
+########################################################
+## Server Protocol class with methods for listening,  ##
+## processing,encoding, decoding, sending and         ##
+## receiving Image                                    ##
+########################################################
 
 class ServerProtocol:
 
@@ -65,25 +70,30 @@ class ServerProtocol:
         self.socket.close()
         self.socket = None
 
-        ### We can add acknowledgements for send and recieve on client and server side
-        ##for now we assume it works fine
+        ### We can add acknowledgements for send and ###
+        ### recieve on client and server side        ###
+        ### for now we assume it works fine          ###
 
 if __name__ == '__main__':
     
     try:
+        ## Start Server for receiving input##
         sp = ServerProtocol()
         sp.listen('127.0.0.1', 55555)
         print("Socket intialized and listening")
         content_image=sp.receive_images()
         sp.close()
-    
+        
+        ## Process the image ##
         stylized = Stylize_Image.predict(content_image)
-    
         print("Stylized Image Obtained")
+        
+        ## Start Server to send file to client ##
         sp = ServerProtocol()
         sp.connect('127.0.0.1', 12344)
         sp.send_image(stylized)
         print("Sent Image to CLient")
         sp.close()
+        
     except KeyboardInterrupt:
         sp.close()

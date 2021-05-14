@@ -1,12 +1,16 @@
+## Import all libraries here##
 from socket import *
 from struct import pack,unpack
 import cv2
 import base64
-import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
 
-
+########################################################
+## Client Protocol class with methods for connecting, ##
+## listening,encoding, decoding, sending and          ##
+## receiving Image                                    ##
+########################################################
 class ClientProtocol:
 
     def __init__(self):
@@ -56,7 +60,8 @@ class ClientProtocol:
         # sendall to make sure it blocks if there's back-pressure on the socket
         self.socket.sendall(length)
         self.socket.sendall(image_data)
-    
+        
+    ## Method to encode Image into base64 string ##
     def encode_toString(self,img):
         retval, buffer = cv2.imencode('.jpg',img)
         data = base64.b64encode(buffer)
@@ -80,8 +85,7 @@ class ClientProtocol:
     def close(self):
         self.socket.close()
         self.socket = None
-
-        # could handle a bad ack here, but we'll assume it's fine.            
+        
 if __name__ == '__main__':
     
     ## Encode and Send Content Image

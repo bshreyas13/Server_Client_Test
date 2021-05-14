@@ -4,6 +4,8 @@ Created on Thu May 13 12:36:45 2021
 
 @author: shrey
 """
+## This script is built from the TF2 documentation for Neural Style Tranfer##
+## This is a test script to check for all the fuctionalities required ##
 
 import tensorflow as tf
 import matplotlib.pyplot as plt
